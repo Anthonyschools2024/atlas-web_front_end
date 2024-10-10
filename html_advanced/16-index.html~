@@ -25,7 +25,7 @@
                     <h2>We help you build your brand!</h2>
                 </header>
                 <div>
-                    <!-- Additional content can go here -->
+                    <!-- Additional content can be added here -->
                 </div>
             </div>
         </section>
@@ -34,7 +34,7 @@
             <div>
                 <header>
                     <h2>Services</h2>
-                    <p>Our comprehensive services to enhance your brand.</p>
+                    <p>Explore our wide range of services.</p>
                 </header>
                 <div>
                     <h3>Design & Concept</h3>
@@ -51,7 +51,7 @@
             <div>
                 <header>
                     <h2>Works</h2>
-                    <p>Showcase of our best projects.</p>
+                    <p>Check out our latest projects.</p>
                 </header>
                 <div>
                     <article>
@@ -71,7 +71,7 @@
             <div>
                 <header>
                     <h2>About Us</h2>
-                    <p>Learn more about our team and values.</p>
+                    <p>Learn more about our team and culture.</p>
                 </header>
                 <div>
                     <h3>Who are we</h3>
@@ -127,10 +127,11 @@
                     <p>Get in touch with us!</p>
                 </header>
                 <div>
-                    <!-- Additional contact details can go here -->
+                    <!-- Additional contact details can be added here -->
                 </div>
             </div>
         </section>
+        
     </main>
     <footer>
         <div>
