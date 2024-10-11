@@ -49,17 +49,17 @@
             <div>
                 <header>
                     <h2>Works</h2>
-                    <p>Take a look in our portfolio.</p> <!-- Updated header -->
+                    <p>Takealookinourportfolio.</p>
                 </header>
                 <div>
                     <article>
-                        <h3>InteriorDesign</h3> <!-- Updated formatting -->
+                        <h3>InteriorDesign</h3>
                     </article>
                     <article>
-                        <h3>WebDevelopment</h3> <!-- Updated formatting -->
+                        <h3>WebDevelopment</h3>
                     </article>
                     <article>
-                        <h3>PersonalBrand</h3> <!-- Updated formatting -->
+                        <h3>PersonalBrand</h3>
                     </article>
                 </div>
             </div>
@@ -125,7 +125,6 @@
                     <p>Get in touch with us.</p>
                 </header>
                 <div>
-                    <!-- Additional contact information can go here -->
                 </div>
             </div>
         </section>
