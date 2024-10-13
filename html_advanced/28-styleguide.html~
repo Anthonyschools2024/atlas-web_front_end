@@ -45,6 +45,7 @@
           <h2>Lists</h2>
         </header>
         <div>
+          <!-- Unordered List -->
           <h3>Unordered</h3>
           <ul>
             <li>Dolor pulvinar etiam magna etiam.</li>
@@ -52,6 +53,7 @@
             <li>Felis enim feugiat dolore viverra.</li>
           </ul>
 
+          <!-- Ordered List -->
           <h3>Ordered</h3>
           <ol>
             <li>Dolor pulvinar etiam magna etiam.</li>
@@ -59,6 +61,7 @@
             <li>Felis enim feugiat dolore viverra.</li>
           </ol>
 
+          <!-- Definition List -->
           <h3>Definition</h3>
           <dl>
             <dt>Term: Definition List title</dt>
@@ -71,8 +74,9 @@
         </div>
       </section>
 
-      <!-- Horizontal rule section -->
       <!-- Horizontal rule -->
+      <div></div>
+      <!-- Horizontal rule section -->
       <section>
         <header>
           <h2>Horizontal rule</h2>
@@ -81,6 +85,7 @@
           <hr>
         </div>
       </section>
+
     </main>
 
     <footer>
