@@ -1,0 +1,1 @@
+In this file we will be linking images with the webpage through css.
