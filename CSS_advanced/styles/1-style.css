@@ -1,0 +1,4 @@
+/* this script ensures smooth scrolling throughout the entirety of the web page */
+html {
+  scroll-behavior: smooth;
+}

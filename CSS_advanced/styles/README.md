@@ -1,0 +1,1 @@
+In this directory we will be implementing the scroll feature, we will make it as smooth as possible!
