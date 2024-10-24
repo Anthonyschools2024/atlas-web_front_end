@@ -1,0 +1,21 @@
+/* Define custom properties on the root element */
+:root {
+  --color-primary: #d73953; 
+  --color-black: #090909;
+  --color-white: #ffffff;
+  --color-light-grey: #f3f3f3;
+  --color-dark-grey: #353535;
+  --text-color: var(--color-black); /* Set text color to the defined black */
+}
+
+/* Revisit section-tagline and card-category declarations */
+.section-tagline, 
+.card-category {
+  color: var(--color-primary); /* Use the defined primary color */
+}
+
+/* Revisit body and anchor declarations */
+body, 
+a {
+  color: var(--text-color); /* Use the defined text color */
+}
