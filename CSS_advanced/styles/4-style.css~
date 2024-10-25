@@ -1,0 +1,29 @@
+/* 
+  Define custom font properties for the website.
+  These properties will be used to set the font family for different elements.
+*/
+:root {
+  /* Base font family for general text content */
+  --font-family-base: "Helvetica Neue", Helvetica, Arial, sans-serif; 
+}
+
+:root {
+  /* Title font family for headings (h1 to h6) */
+  --font-family-title: "Helvetica Neue", Helvetica, Arial, sans-serif; 
+}
+
+/* 
+  Apply the base font family to the body element.
+  This will set the default font for all text within the body.
+*/
+body {
+  font-family: var(--font-family-base);
+}
+
+/* 
+  Apply the title font family to all heading elements (h1 to h6).
+  This ensures consistent font usage for headings across the website.
+*/
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-title);
+}
