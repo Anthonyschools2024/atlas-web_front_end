@@ -1,16 +1,18 @@
+/* Reset default styles across browsers */
 @import url("https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css");
 
-/* Task 15: Universal box-sizing */
+/* Apply universal box-sizing to include padding and border in element width */
 * {
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
+/* Ensure ::before and ::after pseudo-elements inherit box-sizing */
 *::before,
 *::after {
-  box-sizing: inherit; 
+  box-sizing: inherit;
 }
 
-
+/* Define common styles and values */
 :root {
   --color-primary: #d73953;
   --color-black: #090909;
@@ -18,36 +20,98 @@
   --color-light-grey: #f3f3f3;
   --color-dark-grey: #353535;
   --text-color: var(--color-black);
+
   --font-family-base: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-family-title: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
   --font-size-small: 1.2rem;
   --font-size-medium: 1.6rem;
   --font-size-large: 1.8rem;
   --font-size-x-large: 2.3rem;
   --font-size-xx-large: 4.8rem;
+
   --font-weight-regular: 400;
   --font-weight-bold: 700;
+
   --line-height-small: 1.2;
   --line-height-base: 1.5;
   --line-height-big: 1.8;
+
   --section-header-align: center;
   --section-tagline-transform: uppercase;
   --section-title-margin: 0;
   --section-title-color: var(--color-black);
 }
 
-/* The rest of your CSS code remains the same */
+/* Base styles for the entire document */
 html {
+  /* Set base font size to 10px for easier rem calculations */
+  font-size: 62.5%; 
+  /* Enable smooth scrolling for anchor links */
   scroll-behavior: smooth;
-  font-size: 62.5%;
 }
 
+/* Default styles for the body text */
 body {
   font-family: var(--font-family-base);
-  color: var(--text-color);
   font-size: var(--font-size-medium);
   font-weight: var(--font-weight-regular);
+  color: var(--text-color);
   line-height: var(--line-height-base);
 }
 
-/* ... (rest of your CSS) */
+/* Style links */
+a:link { 
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+a:visited {
+  font-style: italic;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:active {
+  background-color: var(--color-light-grey);
+}
+
+/* Utility class to hide elements visually but keep them accessible */
+.visually-hidden {
+  display: none;
+}
+
+/* Styles for card categories */
+.card-category {
+  color: var(--color-primary);
+}
+
+/* Styles for section headers */
+.section-header {
+  text-align: var(--section-header-align);
+}
+
+/* Styles for section titles */
+.section-title {
+  font-family: var(--font-family-title);
+  font-size: var(--font-size-xx-large);
+  font-weight: var(--font-weight-bold);
+  margin: var(--section-title-margin);
+  color: var(--section-title-color);
+}
+
+/* Styles for section taglines */
+.section-tagline {
+  color: var(--color-primary);
+  font-family: var(--font-family-title);
+  text-transform: var(--section-tagline-transform);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Default styles for all headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-title);
+  font-weight: var(--font-weight-bold);
+}
