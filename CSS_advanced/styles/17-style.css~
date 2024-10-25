@@ -133,7 +133,7 @@ h6 {
 }
 
 /* Task 17: Apply footer padding */
-footer {  /* Corrected selector */
+footer {
   padding: var(--footer-padding);
   color: var(--color-white);
   background-color: var(--color-black);
