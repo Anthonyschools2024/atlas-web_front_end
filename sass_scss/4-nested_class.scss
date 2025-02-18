@@ -1,0 +1,11 @@
+// 4-nested_class.scss
+
+body {
+  // 1. Default text color for everything inside body
+  color: #3D3D3D;
+
+  // 2. Nested rule: elements with class "red" inside body
+  .red {
+    color: #FF0000;
+  }
+}
