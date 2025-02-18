@@ -1,0 +1,19 @@
+// 2-color_variables.scss
+
+// 1. Define two Sass variables
+$text-color: #3D3D3D;
+$background-color: #6D6D6D;
+
+// 2. Assign the variables to the respective elements
+body {
+  color: $text-color;
+  background-color: $background-color;
+}
+
+p {
+  color: $text-color;
+}
+
+h2 {
+  background-color: $background-color;
+}
