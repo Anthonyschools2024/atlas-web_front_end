@@ -1,0 +1,1 @@
+In this project we will be learning how to implement flexbox with in our css code. Making the web application dynamic between desk top and mobile. Flexbox is basically resposible for the dynamic change in size between devices.
