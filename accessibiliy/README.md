@@ -1,0 +1,1 @@
+In this project we will be learning how to make our websites accessiable for a board spectrum of people. Making easy for everyone reguardless if thy suffer from a disability, our websites are required to be operable even for those people.
