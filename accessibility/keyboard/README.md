@@ -1,0 +1,1 @@
+In this directory we will be elarning how to make a web application accessible for everyone reguardless if htat person has a disability. Particularly in this portion of the project we will be learning how to make it accessiable for keyboard users.
