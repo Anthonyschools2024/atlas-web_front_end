@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Holberton - Web Stack - Bootstrap</title>
+    <meta name="description" content="Bootstrap is a free and open-source CSS framework">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
+          crossorigin="anonymous">
+  </head>
+  <body>
+    <!-- First line: 4 cells; screen ≥992px in one row, <992px stacked -->
+    <div class="row">
+      <div class="col-12 col-lg-3 p-2 text-center text-white bg-primary">Primary</div>
+      <div class="col-12 col-lg-3 p-2 text-center text-white bg-success">Success</div>
+      <div class="col-12 col-lg-3 p-2 text-center text-white bg-danger">Danger</div>
+      <div class="col-12 col-lg-3 p-2 text-center text-white bg-warning">Warning</div>
+    </div>
+
+    <hr />
+
+    <!-- Second line: 4 cells; screen ≥576px in one row, <576px stacked -->
+    <div class="row">
+      <div class="col-12 col-sm-3 p-2 text-center text-white bg-primary">Primary</div>
+      <div class="col-12 col-sm-3 p-2 text-center text-white bg-success">Success</div>
+      <div class="col-12 col-sm-3 p-2 text-center text-white bg-danger">Danger</div>
+      <div class="col-12 col-sm-3 p-2 text-center text-white bg-warning">Warning</div>
+    </div>
+
+    <hr />
+
+    <!-- Third line: 3 cells; widths: first=col-lg-2, second=col-lg-4, third=col-lg-6;
+         screen ≥992px in one row, <992px stacked -->
+    <div class="row">
+      <div class="col-12 col-lg-2 p-2 text-center text-white bg-primary">Primary</div>
+      <div class="col-12 col-lg-4 p-2 text-center text-white bg-success">Success</div>
+      <div class="col-12 col-lg-6 p-2 text-center text-white bg-danger">Danger</div>
+    </div>
+
+    <hr />
+
+    <!-- Fourth line: 4 cells with responsive ordering and equal width
+         Order changes based on breakpoints:
+         - ≥1200px (xl): Primary → Success → Danger → Warning
+         - 992px–1199px (lg): Warning → Primary → Success → Danger
+         - 768px–991px (md): Danger → Warning → Primary → Success
+         - ≤768px (xs): Success → Danger → Warning → Primary
+    -->
+    <div class="row">
+      <div class="col-12 col-md-3 col-lg-3 col-xl-3 p-2 text-center text-white bg-primary
+                  order-4 order-md-3 order-lg-2 order-xl-1">
+        Primary
+      </div>
+      <div class="col-12 col-md-3 col-lg-3 col-xl-3 p-2 text-center text-white bg-success
+                  order-1 order-md-4 order-lg-3 order-xl-2">
+        Success
+      </div>
+      <div class="col-12 col-md-3 col-lg-3 col-xl-3 p-2 text-center text-white bg-danger
+                  order-2 order-md-1 order-lg-4 order-xl-3">
+        Danger
+      </div>
+      <div class="col-12 col-md-3 col-lg-3 col-xl-3 p-2 text-center text-white bg-warning
+                  order-3 order-md-2 order-lg-1 order-xl-4">
+        Warning
+      </div>
+    </div>
+
+    <hr/>
+
+    <!-- Fifth line: 2 cells; each ~16% width (col-md-2)
+         For screens ≥768px: arranged in one row at opposite ends
+         (using justify-content-between on the row);
+         for screens <768px: they stack (col-12) -->
+    <div class="row justify-content-between">
+      <div class="col-12 col-md-2 p-2 text-center text-white bg-primary">Primary</div>
+      <div class="col-12 col-md-2 p-2 text-center text-white bg-success">Success</div>
+    </div>
+
+    <hr/>
+
+    <!-- Last line: 3 cells; each ~16% width (col-md-2);
+         For screens ≥768px: arranged in one row with
+         the gap between the first and middle cell twice as big as between middle and last cell
+         (using margin utilities);
+         for screens <768px: they stack -->
+    <div class="row">
+      <div class="col-12 col-md-2 mr-md-3 p-2 text-center text-white bg-primary">Primary</div>
+      <div class="col-12 col-md-2 mr-md-2 p-2 text-center text-white bg-success">Success</div>
+      <div class="col-12 col-md-2 p-2 text-center text-white bg-danger">Danger</div>
+    </div>
+  </body>
+</html>
