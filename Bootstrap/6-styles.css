@@ -1,0 +1,43 @@
+/* btn-primary: default state and interactive states */
+.btn-primary {
+  background-color: #E0003C !important;
+  border-color: #E0003C !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open > .dropdown-toggle.btn-primary {
+  background-color: #BC1340 !important;
+  border-color: #BC1340 !important;
+}
+
+/* btn-outline-primary: force text and border color */
+.btn-outline-primary {
+  color: #E0003C !important;
+  border-color: #E0003C !important;
+}
+
+/* Anchor links: force text color in normal, hover, and focus states */
+a {
+  color: #E0003C !important;
+}
+
+a:hover,
+a:focus {
+  color: #E0003C !important;
+}
+
+/* Card components: override border color and set border-radius */
+.card,
+.card-header,
+.card-footer {
+  border-color: #E0003C !important;
+  border-radius: 1rem !important;
+}
+
+/* .text-muted override */
+.text-muted {
+  color: #8C8C8C !important;
+}
