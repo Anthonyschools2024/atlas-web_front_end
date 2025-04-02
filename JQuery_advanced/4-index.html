@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Task 5: HTML Function</title>
+    <!-- Load the latest slim & minified version of jQuery from the CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" type="application/javascript"></script>
+  </head>
+  <body>
+    <script type="application/javascript">
+      // Function to create the family tree table and append it to the page
+      function createFamilyTree() {
+        // Create the entire table as one string
+        var tableHTML = '<table>' +
+                          '<thead>' +
+                            '<tr>' +
+                              '<th>Firstname</th>' +
+                              '<th>Lastname</th>' +
+                            '</tr>' +
+                          '</thead>' +
+                          '<tbody>' +
+                            '<tr>' +
+                              '<td>Guillaume</td>' +
+                              '<td>Salva</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                              '<td>Paulette</td>' +
+                              '<td>Salva</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                              '<td>Antoine</td>' +
+                              '<td>Salva</td>' +
+                            '</tr>' +
+                          '</tbody>' +
+                        '</table>';
+        // Append the table to the body with a single append call
+        $("body").append(tableHTML);
+      }
+
+      // Function to replace the children of the tbody with a new row
+      function replaceFamilyTree() {
+        // Use the html() method to replace the content of tbody with a new row
+        $("table tbody").html("<tr><td>Gerard</td><td>Bonissa</td></tr>");
+      }
+
+      // When the DOM is fully loaded, call both functions
+      $(document).ready(function() {
+        createFamilyTree();
+        replaceFamilyTree();
+      });
+    </script>
+  </body>
+</html>
