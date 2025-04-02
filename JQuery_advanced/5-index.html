@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Task 6: Click Attribute and Remove Function</title>
+    <!-- Load the latest slim & minified version of jQuery from the CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" type="application/javascript"></script>
+  </head>
+  <body>
+    <script type="application/javascript">
+      // Function to create an empty table with thead and an empty tbody
+      function createFamilyTree() {
+        // Build the table as one complete HTML string
+        var tableHTML = '<table>' +
+                          '<thead>' +
+                            '<tr>' +
+                              '<th>Firstname</th>' +
+                              '<th>Lastname</th>' +
+                            '</tr>' +
+                          '</thead>' +
+                          '<tbody></tbody>' +
+                        '</table>';
+        // Append the table to the body in one call
+        $("body").append(tableHTML);
+      }
+
+      // Function to add a new member row to the table
+      function addNewMember(firstName, lastName) {
+        // Create a new table row
+        var $tr = $("<tr>");
+        // Create the first cell displaying the first name
+        var $tdFirst = $("<td>").text(firstName);
+        // Create the second cell displaying the last name
+        var $tdLast = $("<td>").text(lastName);
+        // Create the third cell displaying (x)
+        var $tdDelete = $("<td>").text("(x)");
+        // Set the background color of the third cell to orange using css()
+        $tdDelete.css("background-color", "orange");
+        // Add a click event handler to the third cell that removes the entire row when clicked
+        $tdDelete.click(function() {
+          $(this).closest("tr").remove();
+        });
+        // Append the cells to the row
+        $tr.append($tdFirst, $tdLast, $tdDelete);
+        // Append the new row to the table's tbody
+        $("table tbody").append($tr);
+      }
+
+      // When the DOM is fully loaded, create the table and add the family members
+      $(document).ready(function() {
+        // Create the empty family tree table with header
+        createFamilyTree();
+        // Add new members as specified
+        addNewMember("Guillaume", "Salva");
+        addNewMember("Arielle", "Snizt");
+        addNewMember("Fanette", "Snizt");
+        addNewMember("Gerard", "Snizt");
+        addNewMember("Victor", "Salva");
+      });
+    </script>
+  </body>
+</html>
