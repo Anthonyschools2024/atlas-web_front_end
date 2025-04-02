@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Task 8: Wikipedia Query</title>
+    <!-- Load the full minified version of jQuery from the CDN (this version supports ajax methods) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" type="application/javascript"></script>
+  </head>
+  <body>
+    <script type="application/javascript">
+      // Global variable to hold a reference to the results list (<ul> element)
+      var $resultsList;
+      
+      // Function: createSearchForm
+      // Purpose: This function creates and appends a search form to the page.
+      // The form includes:
+      //   - An empty text input (no id, name, or class)
+      //   - A submit input button
+      //   - An empty <ul> element to later display search results
+      // Additionally, when the form is submitted, it prevents the default behavior
+      // and calls the queryWikipedia function with the value entered in the text input.
+      function createSearchForm() {
+        // Create a form element
+        var $form = $("<form>");
+        // Create an empty text input
+        var $textInput = $("<input>", { type: "text" });
+        // Create a submit input button with a label "Search"
+        var $submitInput = $("<input>", { type: "submit", value: "Search" });
+        // Create an empty <ul> element for displaying query results
+        $resultsList = $("<ul>");
+        
+        // Append the text input, submit button, and ul to the form
+        $form.append($textInput, $submitInput, $resultsList);
+        // Append the entire form to the body of the page
+        $("body").append($form);
+        
+        // Attach a submit event handler to the form
+        $form.submit(function(event) {
+          event.preventDefault(); // Prevent form from submitting normally
+          // Retrieve the value of the text input (using the fact that it's the only text input in the form)
+          var searchTerm = $(this).find("input[type='text']").val();
+          // Call the queryWikipedia function with the search term
+          queryWikipedia(searchTerm);
+        });
+      }
+      
+      // Function: addNewArticle
+      // Purpose: This function adds a new list item (<li>) to the results <ul>.
+      // It accepts three arguments:
+      //   - id (string): The page id from Wikipedia
+      //   - title (string): The title of the article
+      //   - snippet (string): A short snippet from the article (may include HTML)
+      // Within the <li>, two paragraphs are created:
+      //   - The first paragraph includes a <span> displaying "id -" and a <b> element with the title.
+      //   - The second paragraph contains the snippet (inserted as HTML so that any formatting is preserved).
+      // Finally, the <li> is appended to the <ul> created by createSearchForm.
+      function addNewArticle(id, title, snippet) {
+        // Create a new list item
+        var $li = $("<li>");
+        // First paragraph: span with "id - " and bolded title
+        var $p1 = $("<p>").append(
+          $("<span>").text(id + " - "),
+          $("<b>").text(title)
+        );
+        // Second paragraph: contains the snippet. Use html() to allow embedded HTML.
+        var $p2 = $("<p>").html(snippet);
+        // Append both paragraphs to the list item
+        $li.append($p1, $p2);
+        // Append the list item to the global results list (<ul>)
+        $resultsList.append($li);
+      }
+      
+      // Function: queryWikipedia
+      // Purpose: This function queries the Wikipedia API using an AJAX GET request.
+      // It accepts one argument:
+      //   - search (string): The search term entered by the user.
+      // It constructs a data object with the required parameters:
+      //   - action: "query"
+      //   - format: "json"
+      //   - list: "search"
+      //   - srsearch: the user's search term
+      //   - origin: "*" (required for CORS support)
+      // Upon a successful response, it clears the previous results and
+      // iterates over each result in the response, calling addNewArticle for each.
+      function queryWikipedia(search) {
+        var data = {
+          action: "query",
+          format: "json",
+          list: "search",
+          srsearch: search,
+          origin: "*"
+        };
+        
+        // Use jQuery's ajax method to query Wikipedia's API
+        $.ajax({
+          url: "https://en.wikipedia.org/w/api.php",
+          data: data,
+          dataType: "json",
+          type: "GET",
+          success: function(response) {
+            // Clear any existing results in the <ul>
+            $resultsList.empty();
+            // Loop through each search result and add it to the list
+            $.each(response.query.search, function(index, item) {
+              addNewArticle(item.pageid.toString(), item.title, item.snippet);
+            });
+          },
+          error: function(error) {
+            console.error("Error querying Wikipedia: ", error);
+          }
+        });
+      }
+      
+      // When the DOM is fully loaded, create the search form.
+      $(document).ready(function() {
+        createSearchForm();
+      });
+    </script>
+  </body>
+</html>
