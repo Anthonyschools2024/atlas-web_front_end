@@ -1,0 +1,12 @@
+{
+  "name": "jquery_advanced",
+  "version": "1.0.0",
+  "description": "## Overview This project is a hands-on tutorial designed to teach you essential front-end development skills using jQuery and JSON Server. Throughout this project, you will learn how to load jQuery from a CDN, dynamically manipulate the DOM, handle events, perform AJAX operations, and implement pagination. Additionally, you'll simulate a REST API with JSON Server, making it an ideal environment for testing and prototyping dynamic web applications.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

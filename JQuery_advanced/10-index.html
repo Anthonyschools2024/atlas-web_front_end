@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Task 11: Another Get API</title>
+    <!-- Import the full minified version of jQuery to access AJAX methods -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" type="application/javascript"></script>
+  </head>
+  <body>
+    <script type="application/javascript">
+      // Function: addPostRow
+      // Purpose: To append a paragraph to the body that displays post details.
+      // It takes a data object representing a post with properties:
+      // - id, title, and author.
+      // It creates a paragraph containing a span with the following text:
+      // "Post created with id ID, title: TITLE, author: AUTHOR"
+      // The values ID, TITLE, and AUTHOR are taken from the data object.
+      function addPostRow(data) {
+        var $p = $("<p>").append(
+          $("<span>").text("Post created with id " + data.id + ", title: " + data.title + ", author: " + data.author)
+        );
+        $("body").append($p);
+      }
+      
+      // Function: listPosts
+      // Purpose: To query the local JSON Server for posts and display them.
+      // It uses jQuery's $.get() method to send a GET request to the "posts" endpoint.
+      // If the request is successful (HTTP 200), it iterates over the returned posts
+      // and calls addPostRow for each post.
+      // If the server is unavailable or the request fails, it alerts "Server Error".
+      function listPosts() {
+        $.get("http://localhost:3000/posts", function(data) {
+          // data is expected to be an array of post objects.
+          $.each(data, function(index, post) {
+            addPostRow(post);
+          });
+        }).fail(function() {
+          alert("Server Error");
+        });
+      }
+      
+      // Call listPosts when the document is fully loaded.
+      $(document).ready(function() {
+        listPosts();
+      });
+    </script>
+  </body>
+</html>

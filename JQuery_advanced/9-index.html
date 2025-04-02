@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Task 10: Wrap/Unwrap</title>
+    <!-- Import full minified jQuery (with AJAX support) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" type="application/javascript"></script>
+    <style>
+      /* CSS to indicate loading state */
+      .loading {
+        opacity: 0.2;
+      }
+      /* Ensure pagination displays horizontally */
+      #pagination {
+        list-style-type: none;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="application/javascript">
+      // Global variables for our result and pagination lists.
+      var $resultsList;
+      var $paginationList;
+
+      // Function: createSearchForm
+      // Purpose: Dynamically creates a search form, a results list (<ul>), and a pagination list (<ul> with id "pagination").
+      // When the form is submitted, it prevents the default behavior and calls queryWikipedia with the entered search term.
+      function createSearchForm() {
+        var $form = $("<form>");
+        var $textInput = $("<input>", { type: "text" });
+        var $submitInput = $("<input>", { type: "submit", value: "Search" });
+        // Create the results list where search results will be shown.
+        $resultsList = $("<ul>");
+        $form.append($textInput, $submitInput, $resultsList);
+        $("body").append($form);
+        // Create the pagination list for page links.
+        $paginationList = $("<ul>", { id: "pagination" });
+        $("body").append($paginationList);
+        
+        // Attach submit event handler to the form.
+        $form.submit(function(event) {
+          event.preventDefault();
+          var searchTerm = $(this).find("input[type='text']").val();
+          queryWikipedia(searchTerm, 0);
+        });
+      }
+
+      // Function: addNewArticle
+      // Purpose: Adds a new list item (<li>) for each search result.
+      // Each <li> contains two paragraphs:
+      //   - The first displays the page id and title.
+      //   - The second shows the article snippet (rendered as HTML).
+      function addNewArticle(id, title, snippet) {
+        var $li = $("<li>");
+        var $p1 = $("<p>").append(
+          $("<span>").text(id + " - "),
+          $("<b>").text(title)
+        );
+        var $p2 = $("<p>").html(snippet);
+        $li.append($p1, $p2);
+        $resultsList.append($li);
+      }
+
+      // Function: displayLoading
+      // Purpose: Visually indicate the loading state by wrapping or unwrapping the first <ul> element (the results list).
+      // If 'loading' is true, it wraps the <ul> with a <div> that has the "loading" class (setting opacity to 0.2).
+      // If false, it unwraps the <ul> to remove the loading effect.
+      function displayLoading(loading) {
+        var $firstUl = $("ul").first();
+        if (loading) {
+          // Wrap the first <ul> with a div that has class "loading"
+          $firstUl.wrap('<div class="loading"></div>');
+        } else {
+          // Unwrap the first <ul> from its parent div
+          $firstUl.unwrap();
+        }
+      }
+
+      // Function: queryWikipedia
+      // Purpose: Queries Wikipedia’s API with the given search term and offset for pagination.
+      // It shows a loading indicator before making the AJAX call and removes it after the response is received.
+      // On success, it populates the results list with articles and builds pagination.
+      function queryWikipedia(search, offset) {
+        if (offset === undefined) {
+          offset = 0;
+        }
+        // Display the loading state.
+        displayLoading(true);
+        var data = {
+          action: "query",
+          format: "json",
+          list: "search",
+          srsearch: search,
+          sroffset: offset,
+          origin: "*"  // Required for CORS.
+        };
+        $.ajax({
+          url: "https://en.wikipedia.org/w/api.php",
+          data: data,
+          dataType: "json",
+          type: "GET",
+          success: function(response) {
+            // Remove the loading indicator.
+            displayLoading(false);
+            // Clear previous results.
+            $resultsList.empty();
+            // Iterate over search results and add them to the list.
+            $.each(response.query.search, function(index, item) {
+              addNewArticle(item.pageid.toString(), item.title, item.snippet);
+            });
+            var totalHits = response.query.searchinfo.totalhits;
+            var itemsPerPage = 10;
+            // Build pagination links.
+            buildPagination(totalHits, itemsPerPage, offset, search);
+          },
+          error: function(error) {
+            displayLoading(false);
+            console.error("Error querying Wikipedia: ", error);
+          }
+        });
+      }
+
+      // Function: buildPagination
+      // Purpose: Builds clickable pagination links based on the total number of items, items per page, and current offset.
+      // Each pagination link is styled inline to appear horizontally and bolded if it represents the current page.
+      // Clicking a link calls queryWikipedia with the appropriate offset.
+      function buildPagination(numberOfItems, itemsPerPage, currentOffset, search) {
+        $paginationList.empty();
+        var totalPages = Math.ceil(numberOfItems / itemsPerPage);
+        for (var i = 1; i <= totalPages; i++) {
+          var pageOffset = (i - 1) * itemsPerPage;
+          var $li = $("<li>").text(i);
+          $li.css({
+            cursor: "pointer",
+            "margin-left": "10px",
+            display: "inline-block"
+          });
+          if (pageOffset === currentOffset) {
+            $li.css("font-weight", "bold");
+          }
+          (function(offsetValue) {
+            $li.click(function() {
+              var currentSearch = $("form input[type='text']").val();
+              queryWikipedia(currentSearch, offsetValue);
+            });
+          })(pageOffset);
+          $paginationList.append($li);
+        }
+      }
+
+      // When the DOM is fully loaded, initialize the search form.
+      $(document).ready(function() {
+        createSearchForm();
+      });
+    </script>
+  </body>
+</html>
