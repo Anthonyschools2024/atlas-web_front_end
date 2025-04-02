@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Task 7: Val, before, and prepend functions</title>
+    <!-- Load the latest slim & minified version of jQuery from the CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" type="application/javascript"></script>
+  </head>
+  <body>
+    <script type="application/javascript">
+      // Function to create an empty family tree table with a header and an empty tbody
+      function createFamilyTree() {
+        // Build the table as one complete HTML string
+        var tableHTML = '<table>' +
+                          '<thead>' +
+                            '<tr>' +
+                              '<th>Firstname</th>' +
+                              '<th>Lastname</th>' +
+                            '</tr>' +
+                          '</thead>' +
+                          '<tbody></tbody>' +
+                        '</table>';
+        // Append the table to the body in one call
+        $("body").append(tableHTML);
+      }
+
+      // Function to add a new member row to the table
+      // Accepts firstName, lastName, and position ("before" or "after")
+      function addNewMember(firstName, lastName, position) {
+        // Create a new table row and three cells
+        var $tr = $("<tr>");
+        var $tdFirst = $("<td>").text(firstName);
+        var $tdLast = $("<td>").text(lastName);
+        var $tdDelete = $("<td>").text("(x)");
+
+        // Set the background color of the delete cell to orange using css()
+        $tdDelete.css("background-color", "orange");
+
+        // Attach a click event to the delete cell that removes its row when clicked
+        $tdDelete.click(function() {
+          $(this).closest("tr").remove();
+        });
+
+        // Append the three cells to the row
+        $tr.append($tdFirst, $tdLast, $tdDelete);
+
+        // If position is "before", insert the row at the top of the table's tbody using prepend;
+        // Otherwise, append it at the bottom
+        if (position === "before") {
+          $("table tbody").prepend($tr);
+        } else {
+          $("table tbody").append($tr);
+        }
+      }
+
+      // Function to create the form above the table
+      function createForm() {
+        // Create a form element
+        var $form = $("<form>");
+
+        // Create two input text fields with placeholders
+        var $inputFirst = $("<input>", { type: "text", placeholder: "First Name" });
+        var $inputLast = $("<input>", { type: "text", placeholder: "Last Name" });
+
+        // Create a select element with two options: "before" and "after"
+        var $select = $("<select>");
+        var $optionBefore = $("<option>", { value: "before" }).text("Before");
+        var $optionAfter = $("<option>", { value: "after" }).text("After");
+        $select.append($optionBefore, $optionAfter);
+
+        // Create a submit input button
+        var $submit = $("<input>", { type: "submit", value: "Add Member" });
+
+        // Append the two inputs, the select, and the submit button to the form
+        $form.append($inputFirst, $inputLast, $select, $submit);
+
+        // Insert the form before the table using the before() method
+        $("table").before($form);
+
+        // Attach a submit event handler to the form
+        $form.submit(function(event) {
+          event.preventDefault();
+          // Use the val() method to get the input values:
+          // Select the first input with .first() and the second input with the nth-of-type selector
+          var firstName = $form.find("input[type='text']").first().val();
+          var lastName = $form.find("input[type='text']:nth-of-type(2)").val();
+          var position = $form.find("select").val();
+
+          // Call addNewMember with the retrieved values
+          addNewMember(firstName, lastName, position);
+
+          // Optionally, clear the input fields after submission
+          $form.find("input[type='text']").val("");
+        });
+      }
+
+      // When the DOM is fully loaded, call createFamilyTree and createForm
+      $(document).ready(function() {
+        createFamilyTree();
+        createForm();
+      });
+    </script>
+  </body>
+</html>
