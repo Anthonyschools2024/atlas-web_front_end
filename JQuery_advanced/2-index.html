@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Task 3: Creating Multiple DOM Elements at Once</title>
+    <!-- Load the latest slim & minified version of jQuery from the CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" type="application/javascript"></script>
+  </head>
+  <body>
+    <script type="application/javascript">
+      // Function to create and append the family tree table to the page
+      function createFamilyTree() {
+        // Create the entire table as one string
+        var tableHTML = '<table>' +
+                          '<thead>' +
+                            '<tr>' +
+                              '<th>Firstname</th>' +
+                              '<th>Lastname</th>' +
+                            '</tr>' +
+                          '</thead>' +
+                          '<tbody>' +
+                            '<tr>' +
+                              '<td>Guillaume</td>' +
+                              '<td>Salva</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                              '<td>Paulette</td>' +
+                              '<td>Salva</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                              '<td>Antoine</td>' +
+                              '<td>Salva</td>' +
+                            '</tr>' +
+                          '</tbody>' +
+                        '</table>';
+        
+        // Append the entire table to the body in one call
+        $("body").append(tableHTML);
+      }
+      
+      // Call the createFamilyTree function when the DOM is fully loaded
+      $(document).ready(function() {
+        createFamilyTree();
+      });
+    </script>
+  </body>
+</html>

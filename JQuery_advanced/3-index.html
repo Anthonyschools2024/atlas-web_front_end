@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Task 4: AJAX GET Request</title>
+    <!-- Load the latest slim & minified version of jQuery from the jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" type="application/javascript"></script>
+  </head>
+  <body>
+    <script type="application/javascript">
+      // Function to load data from the JSON Server using an AJAX GET request.
+      function loadData() {
+        $.ajax({
+          url: "http://localhost:3000/items", // JSON Server endpoint (ensure JSON Server is running with a proper db.json)
+          type: "GET",
+          dataType: "json",
+          success: function(data) {
+            // Create an unordered list element using jQuery.
+            var $ul = $("<ul>");
+            // Iterate over the returned data array and create list items for each element.
+            $.each(data, function(index, item) {
+              // Each list item displays the 'name' property of the item.
+              var $li = $("<li>").text(item.name);
+              // Append each list item to the unordered list.
+              $ul.append($li);
+            });
+            // Append the entire unordered list to the body of the page in a single call.
+            $("body").append($ul);
+          },
+          error: function(error) {
+            console.error("Error fetching data:", error);
+          }
+        });
+      }
+
+      // When the DOM is fully loaded, call the loadData function.
+      $(document).ready(function() {
+        loadData();
+      });
+    </script>
+  </body>
+</html>
