@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Task 12: Post Query</title>
+    <!-- Import the full minified version of jQuery to support AJAX -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" type="application/javascript"></script>
+  </head>
+  <body>
+    <script type="application/javascript">
+      // Function: addPostRow
+      // Purpose: Display a post returned from the server by appending a paragraph to the body.
+      // The paragraph contains a span with text formatted as:
+      // "Post created with id ID, title: TITLE, author: AUTHOR"
+      function addPostRow(data) {
+        var $p = $("<p>").append(
+          $("<span>").text("Post created with id " + data.id + ", title: " + data.title + ", author: " + data.author)
+        );
+        $("body").append($p);
+      }
+
+      // Function: listPosts
+      // Purpose: Query the local JSON Server for posts and list each one using addPostRow.
+      // If the GET request fails, it alerts "Server Error".
+      function listPosts() {
+        $.get("http://localhost:3000/posts", function(data) {
+          $.each(data, function(index, post) {
+            addPostRow(post);
+          });
+        }).fail(function() {
+          alert("Server Error");
+        });
+      }
+
+      // Function: buildForm
+      // Purpose: Build and append a form to the body which allows users to submit a new post.
+      // The form consists of:
+      //   - A div containing a label for "author" (with text "Author") and an input of type text (id "author").
+      //   - A div containing a label for "title" (with text "Title") and a textarea (id "title").
+      //   - An input of type submit.
+      // When the form is submitted, the sendForm function is called.
+      function buildForm() {
+        var $form = $("<form>");
+        
+        // Create the div for author input
+        var $divAuthor = $("<div>");
+        var $labelAuthor = $("<label>", { for: "author" }).text("Author");
+        var $inputAuthor = $("<input>", { type: "text", id: "author" });
+        $divAuthor.append($labelAuthor, $inputAuthor);
+        
+        // Create the div for title input
+        var $divTitle = $("<div>");
+        var $labelTitle = $("<label>", { for: "title" }).text("Title");
+        var $textareaTitle = $("<textarea>", { id: "title" });
+        $divTitle.append($labelTitle, $textareaTitle);
+        
+        // Create the submit button
+        var $submit = $("<input>", { type: "submit", value: "Submit" });
+        
+        // Append all elements to the form
+        $form.append($divAuthor, $divTitle, $submit);
+        // Append the form to the body
+        $("body").append($form);
+        
+        // When the form is submitted, call sendForm (and prevent the default reload)
+        $form.submit(function(event) {
+          event.preventDefault();
+          sendForm($form);
+        });
+      }
+
+      // Function: sendForm
+      // Purpose: Send a POST query to the local JSON Server with data from the form.
+      // Steps:
+      //   1. After the form, add the text "About to send the query to the API" using the .after() method.
+      //   2. Create a data object with the "author" and "title" values from the form inputs.
+      //   3. Send a POST request to the server endpoint "http://localhost:3000/posts".
+      //   4. If the POST request succeeds, call addPostRow with the response data.
+      //   5. If the request fails, display an alert "Error sending the POST query".
+      function sendForm($form) {
+        // Add text after the form indicating the query is about to be sent
+        $form.after("About to send the query to the API");
+        
+        // Retrieve values from the input fields
+        var authorVal = $("#author").val();
+        var titleVal = $("#title").val();
+        
+        // Create the data object
+        var data = {
+          author: authorVal,
+          title: titleVal
+        };
+        
+        // Send the POST request using $.ajax
+        $.ajax({
+          url: "http://localhost:3000/posts",
+          type: "POST",
+          data: data,
+          success: function(response) {
+            // If successful, call addPostRow to display the new post
+            addPostRow(response);
+          },
+          error: function() {
+            // If there's an error, alert the user
+            alert("Error sending the POST query");
+          }
+        });
+      }
+      
+      // When the document is fully loaded, initialize by calling listPosts and buildForm.
+      $(document).ready(function() {
+        listPosts();
+        buildForm();
+      });
+    </script>
+  </body>
+</html>
