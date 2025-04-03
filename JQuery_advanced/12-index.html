@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Task 13: Delete Query</title>
+    <!-- Import full minified version of jQuery for AJAX support -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" type="application/javascript"></script>
+  </head>
+  <body>
+    <script type="application/javascript">
+      // Function: addPostRow
+      // Purpose: Display a post by appending a paragraph to the body.
+      // The paragraph gets an id "row-ID" where ID is the post's id.
+      // It first appends a span with the text "(delete) " which, when clicked,
+      // calls deletePost with the post's id. Then it appends another span with the
+      // post information.
+      function addPostRow(data) {
+        // Create a paragraph element with an id attribute using the post id.
+        var $p = $("<p>", { id: "row-" + data.id });
+        
+        // Create a span element for deletion.
+        // It displays the text "(delete) " and is clickable.
+        var $deleteSpan = $("<span>").text("(delete) ");
+        $deleteSpan.click(function() {
+          deletePost(data.id);
+        });
+        
+        // Create a span element with the post details.
+        var $infoSpan = $("<span>").text("Post created with id " + data.id + ", title: " + data.title + ", author: " + data.author);
+        
+        // Append the delete span first, then the info span.
+        $p.append($deleteSpan, $infoSpan);
+        
+        // Append the complete paragraph to the body.
+        $("body").append($p);
+      }
+      
+      // Function: listPosts
+      // Purpose: Query the JSON Server for posts and display them using addPostRow.
+      // It sends a GET request to the posts endpoint.
+      function listPosts() {
+        $.get("http://localhost:3000/posts", function(data) {
+          $.each(data, function(index, post) {
+            addPostRow(post);
+          });
+        }).fail(function() {
+          alert("Server Error");
+        });
+      }
+      
+      // Function: buildForm
+      // Purpose: Build a form for submitting a new post.
+      // The form includes:
+      //   - A div with a label "Author" and an input of type text with id "author".
+      //   - A div with a label "Title" and a textarea with id "title".
+      //   - An input of type submit.
+      // When the form is submitted, it prevents the default behavior and calls sendForm.
+      function buildForm() {
+        var $form = $("<form>");
+        
+        // Create the div for the author input.
+        var $divAuthor = $("<div>");
+        var $labelAuthor = $("<label>", { for: "author" }).text("Author");
+        var $inputAuthor = $("<input>", { type: "text", id: "author" });
+        $divAuthor.append($labelAuthor, $inputAuthor);
+        
+        // Create the div for the title input.
+        var $divTitle = $("<div>");
+        var $labelTitle = $("<label>", { for: "title" }).text("Title");
+        var $textareaTitle = $("<textarea>", { id: "title" });
+        $divTitle.append($labelTitle, $textareaTitle);
+        
+        // Create the submit button.
+        var $submit = $("<input>", { type: "submit", value: "Submit" });
+        
+        // Append all elements to the form.
+        $form.append($divAuthor, $divTitle, $submit);
+        $("body").append($form);
+        
+        // Attach a submit event handler.
+        // Prevents the default form submission and calls sendForm.
+        $form.submit(function(event) {
+          event.preventDefault();
+          sendForm($form);
+        });
+      }
+      
+      // Function: sendForm
+      // Purpose: Gather data from the form and send a POST request to the JSON Server.
+      // It also displays a text after the form to indicate that the query is being sent.
+      // On success, it calls addPostRow with the response data.
+      // On failure, it alerts "Error sending the POST query".
+      function sendForm($form) {
+        // Add text after the form indicating that the query is about to be sent.
+        $form.after("About to send the query to the API");
+        
+        // Get the values from the form inputs.
+        var authorVal = $("#author").val();
+        var titleVal = $("#title").val();
+        
+        // Create the data object with title and author.
+        var data = {
+          author: authorVal,
+          title: titleVal
+        };
+        
+        // Send a POST request using AJAX.
+        $.ajax({
+          url: "http://localhost:3000/posts",
+          type: "POST",
+          data: data,
+          success: function(response) {
+            // Call addPostRow to display the new post.
+            addPostRow(response);
+          },
+          error: function() {
+            alert("Error sending the POST query");
+          }
+        });
+      }
+      
+      // Function: deletePost
+      // Purpose: Send a DELETE request for a given post id.
+      // On success, it removes the corresponding paragraph from the DOM.
+      // On failure, it alerts "Post was not deleted".
+      function deletePost(id) {
+        $.ajax({
+          url: "http://localhost:3000/posts/" + id,
+          type: "DELETE",
+          success: function(response) {
+            // Remove the post row using jQuery's remove function.
+            $("#row-" + id).remove();
+          },
+          error: function() {
+            alert("Post was not deleted");
+          }
+        });
+      }
+      
+      // When the document is fully loaded, initialize by calling listPosts and buildForm.
+      $(document).ready(function() {
+        listPosts();
+        buildForm();
+      });
+    </script>
+  </body>
+</html>
