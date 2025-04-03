@@ -1,9 +1,12 @@
+// Function welcomeMessage accepts a fullName string and returns a closure.
+// The returned function, when called, will alert "Welcome <fullName>".
 function welcomeMessage(fullName) {
-  return function() {
-    alert("Welcome " + fullName);
-  };
+    return function() {
+        alert("Welcome " + fullName);
+    };
 }
 
-const guillaume = welcomeMessage("Guillaume");
-const alex = welcomeMessage("Alex");
-const fred = welcomeMessage("Fred");
+// Creating three variables that store the closures with specific names.
+var guillaume = welcomeMessage("Guillaume");
+var alex = welcomeMessage("Alex");
+var fred = welcomeMessage("Fred");
