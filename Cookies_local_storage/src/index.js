@@ -1,37 +1,7 @@
-// --- Cookie Helper Functions ---
+// Note: The js-cookie library is expected to be loaded via CDN before this script runs.
+// It makes the `Cookies` object available globally.
 
-function getCookie(name) {
-    const nameEQ = name + "=";
-    const ca = document.cookie.split(';');
-    for(let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1, c.length);
-        }
-        if (c.indexOf(nameEQ) == 0) {
-            const value = c.substring(nameEQ.length, c.length);
-            console.log(`getCookie('${name}') found raw value:`, value); // DIAGNOSTIC
-            try {
-                const decodedValue = decodeURIComponent(value);
-                console.log(`getCookie('${name}') returning decoded value:`, decodedValue); // DIAGNOSTIC
-                return decodedValue;
-            } catch (e) {
-                console.error(`Error decoding cookie value for ${name}:`, value, e); // DIAGNOSTIC
-                return value; // Return raw value if decoding fails
-            }
-        }
-    }
-    console.log(`getCookie('${name}') did not find cookie.`); // DIAGNOSTIC
-    return "";
-}
-
-function deleteCookie(name) {
-    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;';
-    console.log(`Cookie ${name} deleted.`);
-}
-
-
-// --- UI Manipulation Functions ---
+// --- UI Manipulation Functions --- (showForm, hideForm remain the same)
 
 function showForm() {
     const welcomeMsg = document.getElementById('welcomeMessage');
@@ -53,6 +23,10 @@ function hideForm() {
      console.log("Hiding login form.");
 }
 
+/**
+ * Creates and displays the welcome message H1 element.
+ * @param {string} firstname - The user's first name from the cookie.
+ */
 function showWelcomeMessage(firstname) {
     hideForm();
 
@@ -63,11 +37,6 @@ function showWelcomeMessage(firstname) {
 
     const h1 = document.createElement('h1');
     h1.id = 'welcomeMessage';
-
-    // *** Check the value received by this function ***
-    console.log("showWelcomeMessage received firstname:", firstname); // DIAGNOSTIC
-
-    // Use the received firstname value, which should be correctly decoded by getCookie
     h1.appendChild(document.createTextNode(`Welcome: ${firstname} `));
 
     const logoutLink = document.createElement('a');
@@ -84,7 +53,7 @@ function showWelcomeMessage(firstname) {
 
     logoutLink.onclick = function(event) {
          event.preventDefault();
-         window.deleteCookiesAndShowForm();
+         window.deleteCookiesAndShowForm(); // Calls the updated delete function
     };
 
     h1.appendChild(logoutLink);
@@ -96,67 +65,69 @@ function showWelcomeMessage(firstname) {
 // --- Core Logic Functions ---
 
 /**
- * Sets cookies and updates the UI to show the welcome message.
+ * Sets cookies using js-cookie and updates the UI.
+ * Renamed from setCookies.
  */
-function setCookies() {
+function setCookiesAndShowWelcomeMessage() {
     const firstnameInput = document.getElementById('firstname');
     const emailInput = document.getElementById('email');
-    const firstnameValue = firstnameInput.value; // e.g., "eggmin"
+    const firstnameValue = firstnameInput.value;
     const emailValue = emailInput.value;
-
-    console.log("Input values: firstname =", firstnameValue, ", email =", emailValue); // DIAGNOSTIC
 
     if (!firstnameValue || !emailValue) {
          alert("Please enter both firstname and email.");
          return;
     }
 
-    const expiresDate = new Date();
-    expiresDate.setDate(expiresDate.getDate() + 10);
-    const expiresString = expiresDate.toUTCString();
+    console.log("Setting cookies using js-cookie...");
+    // Use Cookies.set(name, value, { attributes })
+    // expires: number of days
+    // path: '/' to make it accessible across the site
+    // js-cookie handles encoding automatically
+    Cookies.set('firstname', firstnameValue, { expires: 10, path: '/' });
+    Cookies.set('email', emailValue, { expires: 10, path: '/' });
 
-    // *** Encode the actual value ***
-    const encodedFirstname = encodeURIComponent(firstnameValue);
-    const encodedEmail = encodeURIComponent(emailValue);
-
-    console.log("Encoded values: firstname =", encodedFirstname, ", email =", encodedEmail); // DIAGNOSTIC
-
-    // *** Construct cookie strings using backticks and the *encoded* variables ***
-    const firstnameCookieString = `firstname=${encodedFirstname}; expires=${expiresString}; path=/`;
-    const emailCookieString = `email=${encodedEmail}; expires=${expiresString}; path=/`;
-
-    console.log("Setting firstname cookie:", firstnameCookieString); // DIAGNOSTIC
-    document.cookie = firstnameCookieString;
-
-    console.log("Setting email cookie:", emailCookieString); // DIAGNOSTIC
-    document.cookie = emailCookieString;
-
-    console.log("Current document.cookie state:", document.cookie); // DIAGNOSTIC
-
+    console.log("Cookies set via js-cookie. Current document.cookie:", document.cookie);
     alert("Cookies set!");
+
     showWelcomeMessageOrForm(); // Update UI
 }
 
-
+/**
+ * Deletes cookies using js-cookie and shows the login form.
+ */
 function deleteCookiesAndShowForm() {
-    console.log("Logout clicked. Deleting cookies...");
-    deleteCookie('firstname');
-    deleteCookie('email');
+    console.log("Logout clicked. Deleting cookies using js-cookie...");
+    // Use Cookies.remove(name, { attributes })
+    // Must specify the same path used when setting the cookie
+    Cookies.remove('firstname', { path: '/' });
+    Cookies.remove('email', { path: '/' });
+
+    console.log("Cookies removed via js-cookie. Current document.cookie:", document.cookie);
     showForm();
 }
 
-
+/**
+ * Checks login status using js-cookie and shows the appropriate UI.
+ */
 function showWelcomeMessageOrForm() {
-    console.log("Checking login status...");
-    const firstname = getCookie('firstname'); // This now logs internally
-    if (firstname) {
-        showWelcomeMessage(firstname); // This now logs internally
+    console.log("Checking login status using js-cookie...");
+    // Use Cookies.get(name) - returns undefined if not found
+    const firstname = Cookies.get('firstname');
+    console.log("Retrieved firstname via Cookies.get:", firstname);
+
+    if (firstname) { // Checks if firstname is not undefined/empty
+        showWelcomeMessage(firstname);
     } else {
         showForm();
     }
 }
 
 // --- Global Assignments & Initial Load ---
-window.setCookies = setCookies;
-window.deleteCookiesAndShowForm = deleteCookiesAndShowForm;
+
+// Update global assignment for the renamed function
+window.setCookiesAndShowWelcomeMessage = setCookiesAndShowWelcomeMessage;
+window.deleteCookiesAndShowForm = deleteCookiesAndShowForm; // Remains the same
+
+// Run the main check when the page content is loaded
 window.addEventListener('DOMContentLoaded', showWelcomeMessageOrForm);
