@@ -1,69 +1,162 @@
+// --- Cookie Helper Functions ---
+
+function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1, c.length);
+        }
+        if (c.indexOf(nameEQ) == 0) {
+            const value = c.substring(nameEQ.length, c.length);
+            console.log(`getCookie('${name}') found raw value:`, value); // DIAGNOSTIC
+            try {
+                const decodedValue = decodeURIComponent(value);
+                console.log(`getCookie('${name}') returning decoded value:`, decodedValue); // DIAGNOSTIC
+                return decodedValue;
+            } catch (e) {
+                console.error(`Error decoding cookie value for ${name}:`, value, e); // DIAGNOSTIC
+                return value; // Return raw value if decoding fails
+            }
+        }
+    }
+    console.log(`getCookie('${name}') did not find cookie.`); // DIAGNOSTIC
+    return "";
+}
+
+function deleteCookie(name) {
+    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;';
+    console.log(`Cookie ${name} deleted.`);
+}
+
+
+// --- UI Manipulation Functions ---
+
+function showForm() {
+    const welcomeMsg = document.getElementById('welcomeMessage');
+    if (welcomeMsg) {
+        welcomeMsg.remove();
+    }
+    const formDiv = document.getElementById('loginFormDiv');
+    if (formDiv) {
+        formDiv.style.display = 'block';
+    }
+     console.log("Showing login form.");
+}
+
+function hideForm() {
+    const formDiv = document.getElementById('loginFormDiv');
+    if (formDiv) {
+        formDiv.style.display = 'none';
+    }
+     console.log("Hiding login form.");
+}
+
+function showWelcomeMessage(firstname) {
+    hideForm();
+
+    const oldWelcomeMsg = document.getElementById('welcomeMessage');
+     if (oldWelcomeMsg) {
+        oldWelcomeMsg.remove();
+     }
+
+    const h1 = document.createElement('h1');
+    h1.id = 'welcomeMessage';
+
+    // *** Check the value received by this function ***
+    console.log("showWelcomeMessage received firstname:", firstname); // DIAGNOSTIC
+
+    // Use the received firstname value, which should be correctly decoded by getCookie
+    h1.appendChild(document.createTextNode(`Welcome: ${firstname} `));
+
+    const logoutLink = document.createElement('a');
+    logoutLink.id = 'logoutLink';
+    logoutLink.textContent = '(logout)';
+    logoutLink.href = '#';
+
+    logoutLink.style.fontWeight = 'normal';
+    logoutLink.style.fontStyle = 'italic';
+    logoutLink.style.marginLeft = '10px';
+    logoutLink.style.cursor = 'pointer';
+    logoutLink.style.color = '#007bff';
+    logoutLink.style.textDecoration = 'underline';
+
+    logoutLink.onclick = function(event) {
+         event.preventDefault();
+         window.deleteCookiesAndShowForm();
+    };
+
+    h1.appendChild(logoutLink);
+    document.body.appendChild(h1);
+    console.log("Showing welcome message.");
+}
+
+
+// --- Core Logic Functions ---
+
 /**
- * Sets cookies for firstname and email based on input fields.
+ * Sets cookies and updates the UI to show the welcome message.
  */
 function setCookies() {
     const firstnameInput = document.getElementById('firstname');
     const emailInput = document.getElementById('email');
-
-    const firstnameValue = firstnameInput.value;
+    const firstnameValue = firstnameInput.value; // e.g., "eggmin"
     const emailValue = emailInput.value;
 
-    // Basic cookie setting (session cookies)
-    // document.cookie = `firstname=${firstnameValue}`;
-    // document.cookie = `email=${emailValue}`;
+    console.log("Input values: firstname =", firstnameValue, ", email =", emailValue); // DIAGNOSTIC
 
-    // Setting cookies with an expiry date (e.g., 10 days) and path
+    if (!firstnameValue || !emailValue) {
+         alert("Please enter both firstname and email.");
+         return;
+    }
+
     const expiresDate = new Date();
-    expiresDate.setDate(expiresDate.getDate() + 10); // Expires in 10 days
+    expiresDate.setDate(expiresDate.getDate() + 10);
+    const expiresString = expiresDate.toUTCString();
 
-    document.cookie = `firstname=${firstnameValue}; expires=${expiresDate.toUTCString()}; path=/`;
-    document.cookie = `email=${emailValue}; expires=${expiresDate.toUTCString()}; path=/`;
+    // *** Encode the actual value ***
+    const encodedFirstname = encodeURIComponent(firstnameValue);
+    const encodedEmail = encodeURIComponent(emailValue);
 
-    console.log("Cookies set!"); // Optional: confirmation in console
-    alert("Cookies set!"); // Optional: confirmation for the user
+    console.log("Encoded values: firstname =", encodedFirstname, ", email =", encodedEmail); // DIAGNOSTIC
+
+    // *** Construct cookie strings using backticks and the *encoded* variables ***
+    const firstnameCookieString = `firstname=${encodedFirstname}; expires=${expiresString}; path=/`;
+    const emailCookieString = `email=${encodedEmail}; expires=${expiresString}; path=/`;
+
+    console.log("Setting firstname cookie:", firstnameCookieString); // DIAGNOSTIC
+    document.cookie = firstnameCookieString;
+
+    console.log("Setting email cookie:", emailCookieString); // DIAGNOSTIC
+    document.cookie = emailCookieString;
+
+    console.log("Current document.cookie state:", document.cookie); // DIAGNOSTIC
+
+    alert("Cookies set!");
+    showWelcomeMessageOrForm(); // Update UI
 }
 
-/**
- * Displays the current cookies in a paragraph element on the page.
- */
-function showCookies() {
-    const cookieOutputDiv = document.getElementById('cookieOutput');
 
-    // Create a new paragraph element for the cookies
-    const p = document.createElement('p');
-
-    // Get cookies - document.cookie returns a string like "name1=value1; name2=value2"
-    const currentCookies = document.cookie;
-
-    // Simple display of the raw cookie string
-    // p.innerHTML = `Cookies: ${currentCookies}`;
-
-    // A slightly more formatted way to display the specific cookies we set
-    let firstName = "Not Set";
-    let email = "Not Set";
-
-    const cookiesArray = currentCookies.split('; ');
-    cookiesArray.forEach(cookie => {
-        const [name, value] = cookie.split('=');
-        if (name === 'firstname') {
-            firstName = value;
-        } else if (name === 'email') {
-            email = value;
-        }
-    });
-
-    p.innerHTML = `Email: ${email} - Firstname: ${firstName}`;
-
-    // Clear previous output and append the new one
-    cookieOutputDiv.innerHTML = ''; // Clear previous content
-    cookieOutputDiv.appendChild(p);
-
-    console.log("Displayed cookies:", currentCookies); // Optional: log to console
+function deleteCookiesAndShowForm() {
+    console.log("Logout clicked. Deleting cookies...");
+    deleteCookie('firstname');
+    deleteCookie('email');
+    showForm();
 }
 
-// Ensure functions are accessible globally when called from HTML onclick
+
+function showWelcomeMessageOrForm() {
+    console.log("Checking login status...");
+    const firstname = getCookie('firstname'); // This now logs internally
+    if (firstname) {
+        showWelcomeMessage(firstname); // This now logs internally
+    } else {
+        showForm();
+    }
+}
+
+// --- Global Assignments & Initial Load ---
 window.setCookies = setCookies;
-window.showCookies = showCookies;
-
-// Optional: Add an initial call to showCookies if cookies might exist from a previous session
-// document.addEventListener('DOMContentLoaded', showCookies);
+window.deleteCookiesAndShowForm = deleteCookiesAndShowForm;
+window.addEventListener('DOMContentLoaded', showWelcomeMessageOrForm);
