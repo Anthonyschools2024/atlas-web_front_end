@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session Storage Shopping Cart</title>
+    <style>
+        /* Styles remain the same as Task 5 */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 0;
+        }
+        li {
+            margin: 5px 0;
+            cursor: pointer;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: fit-content;
+            background-color: #f9f9f9;
+        }
+        li:hover {
+            background-color: #e9e9e9;
+        }
+        #cartMessage {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Available Items</h1>
+    <script>
+        // --- Configuration ---
+        const availableItems = ['Shampoo', 'Soap', 'Sponge', 'Water'];
+
+        // --- Functions ---
+
+        /**
+         * Checks if sessionStorage is supported and enabled.
+         * Renamed from isLocalStorageSupported
+         * @returns {boolean} True if supported, false otherwise.
+         */
+        function isSessionStorageSupported() {
+            try {
+                const testKey = '__testSessionStorageSupport__';
+                // *** Use sessionStorage instead of localStorage ***
+                sessionStorage.setItem(testKey, testKey);
+                sessionStorage.removeItem(testKey);
+                console.log("sessionStorage supported.");
+                return true;
+            } catch (e) {
+                // The alert message can remain general about Web Storage
+                console.error("sessionStorage not supported or disabled:", e);
+                return false;
+            }
+        }
+
+        /**
+         * Adds an item to the cart simulation in sessionStorage.
+         * @param {string} item - The name of the item to add.
+         */
+        function addItemToCart(item) {
+            if (availableItems.includes(item)) {
+                 // *** Use sessionStorage instead of localStorage ***
+                 sessionStorage.setItem(item, 'true');
+                 console.log(`${item} added to cart (sessionStorage).`);
+                 displayCart(); // Update cart count display immediately
+            } else {
+                console.warn(`Attempted to add an invalid item to cart: ${item}`);
+            }
+        }
+
+        /**
+         * Creates the list of available items dynamically and appends it to the body.
+         * (No changes needed in this function itself)
+         */
+        function createStore() {
+            const storeList = document.createElement('ul');
+            storeList.id = 'storeList';
+
+            availableItems.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.textContent = item;
+                listItem.addEventListener('click', function() {
+                    addItemToCart(item);
+                });
+                storeList.appendChild(listItem);
+            });
+
+            document.body.appendChild(storeList);
+            console.log("Store list created and appended to DOM.");
+        }
+
+        /**
+         * Counts relevant items in sessionStorage and displays the cart message.
+         */
+        function displayCart() {
+            let itemCount = 0;
+            availableItems.forEach(item => {
+                // *** Use sessionStorage instead of localStorage ***
+                if (sessionStorage.getItem(item) === 'true') {
+                    itemCount++;
+                }
+            });
+            console.log(`Calculated cart item count from sessionStorage: ${itemCount}`);
+
+            const messageId = 'cartMessage';
+            const existingCartMessage = document.getElementById(messageId);
+
+            if (existingCartMessage) {
+                existingCartMessage.remove();
+                console.log("Removed existing cart message.");
+            }
+
+            if (itemCount > 0) {
+                const cartMessage = document.createElement('p');
+                cartMessage.id = messageId;
+                cartMessage.textContent = `You previously had ${itemCount} items in your cart`;
+                document.body.appendChild(cartMessage);
+                console.log("Displayed cart message.");
+            } else {
+                 console.log("Cart is empty (sessionStorage), no message displayed.");
+            }
+        }
+
+        // --- Initial Load Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // *** Check for sessionStorage support ***
+            if (!isSessionStorageSupported()) {
+                // Alert message remains relevant
+                alert('Sorry, your browser does not support Web storage. Try again with a better one');
+            } else {
+                console.log("Initializing application using sessionStorage...");
+                createStore();
+                displayCart();
+            }
+        });
+
+    </script>
+</body>
+</html>

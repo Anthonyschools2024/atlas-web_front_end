@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Storage Shopping Cart</title>
+    <style>
+        /* Basic styling for clarity */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 0; /* Remove default top margin */
+        }
+        li {
+            margin: 5px 0;
+            cursor: pointer;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: fit-content; /* Make li width fit content */
+            background-color: #f9f9f9;
+        }
+        li:hover {
+            background-color: #e9e9e9;
+        }
+        #cartMessage {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Available Items</h1>
+    <script>
+        // --- Configuration ---
+        const availableItems = ['Shampoo', 'Soap', 'Sponge', 'Water'];
+
+        // --- Functions ---
+
+        /**
+         * Checks if localStorage is supported and enabled.
+         * @returns {boolean} True if supported, false otherwise.
+         */
+        function isLocalStorageSupported() {
+            try {
+                const testKey = '__testLocalStorageSupport__';
+                localStorage.setItem(testKey, testKey);
+                localStorage.removeItem(testKey);
+                console.log("localStorage supported.");
+                return true;
+            } catch (e) {
+                console.error("localStorage not supported or disabled:", e);
+                return false;
+            }
+        }
+
+        /**
+         * Adds an item to the cart simulation in localStorage.
+         * @param {string} item - The name of the item to add.
+         */
+        function addItemToCart(item) {
+            // Ensure item is one of the available items before adding
+            if (availableItems.includes(item)) {
+                 // Use setItem to add/update the item in localStorage
+                 // Storing 'true' as a string is common practice for simple flags
+                 localStorage.setItem(item, 'true');
+                 console.log(`${item} added to cart (localStorage).`);
+                 // Update the displayed cart count immediately after adding
+                 displayCart();
+            } else {
+                console.warn(`Attempted to add an invalid item to cart: ${item}`);
+            }
+        }
+
+        /**
+         * Creates the list of available items dynamically and appends it to the body.
+         */
+        function createStore() {
+            const storeList = document.createElement('ul');
+            storeList.id = 'storeList'; // Give it an ID if needed for styling/selection
+
+            availableItems.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.textContent = item;
+
+                // Add click event listener to each list item
+                listItem.addEventListener('click', function() {
+                    // When clicked, call addItemToCart with the specific item name
+                    addItemToCart(item);
+                });
+
+                storeList.appendChild(listItem);
+            });
+
+            // Append the generated list to the document body
+            document.body.appendChild(storeList);
+            console.log("Store list created and appended to DOM.");
+        }
+
+        /**
+         * Counts relevant items in localStorage and displays the cart message.
+         */
+        function displayCart() {
+            let itemCount = 0;
+            // Iterate through our known available items
+            availableItems.forEach(item => {
+                // Check if the item exists as a key in localStorage
+                if (localStorage.getItem(item) === 'true') {
+                    itemCount++;
+                }
+            });
+            console.log(`Calculated cart item count: ${itemCount}`);
+
+            // Define ID for the message paragraph for easy access/removal
+            const messageId = 'cartMessage';
+            const existingCartMessage = document.getElementById(messageId);
+
+            // Remove the previous message paragraph if it exists
+            if (existingCartMessage) {
+                existingCartMessage.remove();
+                console.log("Removed existing cart message.");
+            }
+
+            // If there are items in the cart (count > 0), display the message
+            if (itemCount > 0) {
+                const cartMessage = document.createElement('p');
+                cartMessage.id = messageId; // Assign the ID
+                cartMessage.textContent = `You previously had ${itemCount} items in your cart`;
+                // Append the message paragraph to the document body
+                document.body.appendChild(cartMessage);
+                console.log("Displayed cart message.");
+            } else {
+                 console.log("Cart is empty, no message displayed.");
+            }
+        }
+
+        // --- Initial Load Logic ---
+        // Use DOMContentLoaded to ensure the body exists before appending elements
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check for localStorage support first
+            if (!isLocalStorageSupported()) {
+                // Alert the user if localStorage is not available
+                alert('Sorry, your browser does not support Web storage. Try again with a better one');
+            } else {
+                // If supported, proceed to create the store list and display the cart status
+                console.log("Initializing application...");
+                createStore();
+                displayCart();
+            }
+        });
+
+    </script>
+</body>
+</html>
