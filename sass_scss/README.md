@@ -1,1 +1,0 @@
-In this project we will be learning how to use SASS or aka Sentatically Awesome Style Sheets, which is a preprocessor that allows the engineer to systematically help organize your code. SASS is a more advanced version of css, allowing you to use varibles and fuctions which allows you to right better organized css. 
