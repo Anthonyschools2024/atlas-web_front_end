@@ -1,1 +1,0 @@
-In this project we will be making this webpage more accessible for all types of people!
