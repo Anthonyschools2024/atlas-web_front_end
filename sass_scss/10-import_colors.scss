@@ -1,0 +1,17 @@
+/* Imports color variables from 10-colors.scss
+  and applies them to corresponding classes.
+*/
+
+@import '10-colors';
+
+.red {
+  color: $red;
+}
+
+.green {
+  color: $green;
+}
+
+.blue {
+  color: $blue;
+}
