@@ -1,0 +1,8 @@
+/* Creates H* tags (from H1 to H5) where the font-size
+  corresponds to the heading level.
+*/
+@for $i from 1 through 5 {
+  h#{$i} {
+    font-size: #{$i}px;
+  }
+}
