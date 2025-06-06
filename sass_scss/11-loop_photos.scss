@@ -1,0 +1,10 @@
+/* Imports a list of names from another file and creates a
+  background image class for each name using a loop.
+*/
+@use '11-photos';
+
+@each $name in 11-photos.$list-names {
+  .photo-#{$name} {
+    background: image-url("photos/#{$name}.jpg") no-repeat;
+  }
+}
